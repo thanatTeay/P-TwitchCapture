@@ -22,12 +22,6 @@ namespace PTwitchCapture
         //public static string client_id = "gp762nuuoqcoxypju8c569th9wz7q5";
         //public static string channel = "icelabuki";
 
-        //public static string twitch_username = "MarionetteMaster";
-        //public static string access_token = "w28vhioyr1srjk0fb96cb74oudwjfo";
-        //public static string refresh_token = "8iahdoptpt8io4zjidf2or4pnaus3rw3ycsk2uwsikfz51bdjk";
-        //public static string client_id = "gp762nuuoqcoxypju8c569th9wz7q5";
-        //public static string channel = "icelabtwitch";
-
         public static string twitch_username = "ligoligo12";
         public static string access_token = "8jdu5hk9pklsxyioggnx3k08nyafls";
         public static string refresh_token = "q0rootdyymy6cvujeqjblkc0sy5buxjxkbi1l8blm7zmmo6rg2";

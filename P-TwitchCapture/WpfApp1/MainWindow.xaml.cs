@@ -12,9 +12,16 @@ namespace PTwitchCapture
 
     public partial class MainWindow : Window
     {
+        int countP1 = 0;
+        int countP2 = 0;
+        bool fisrtClick = false;
+
+
 
         public MainWindow()
         {
+            countP1 = 0;
+            countP2 = 0;
             TheTool.Sys = this;
             InitializeComponent();
             bot = new Bot(this);
@@ -23,12 +30,19 @@ namespace PTwitchCapture
 
             this.Closing += new System.ComponentModel.CancelEventHandler(Window4_Closing);
         }
-        
+
         Bot bot;
         Analysis1 a1 = new Analysis1();
         Analysis2 a2 = new Analysis2();
-
         Boolean isPause = false;
+        //-----------------------------
+        //get these data from FightingICE
+        int hp_p1 = 0;
+        int hp_p2 = 0;
+
+
+        //-----------------------------
+
 
         public void getMsg(string user, string msg)
         {
@@ -39,6 +53,8 @@ namespace PTwitchCapture
                 Console.WriteLine("NewMsg: " + msg);
                 addTxtMsg(user, msg);
                 if (checkV2.IsChecked.Value) { processV2_part1(msg); }
+
+                //We don't use V1 recently
                 else { processV1(msg); }
             }));
         }
@@ -76,6 +92,7 @@ namespace PTwitchCapture
         void processV2_part1(string msg)
         {
             a2.addMsg(msg);
+            countExport();
         }
 
         void processV2_part2()
@@ -114,7 +131,7 @@ namespace PTwitchCapture
                 progress_P1.Foreground = Brushes.Lime;
                 txtP1.Foreground = Brushes.Lime;
             }
-            else 
+            else
             {
                 progress_P1.Foreground = Brushes.Gray;
                 txtP1.Foreground = Brushes.Gray;
@@ -144,22 +161,17 @@ namespace PTwitchCapture
         public void showError(string s) { Console.WriteLine("EX " + s); }
         public void showError(Exception ex) { Console.WriteLine("EX " + ex.ToString()); }
 
+        void countExport()
+        {
+            string path3 = path_root + "/countP1.txt";
+            countP1++;
+            string a = countP1.ToString();
+            TheTool.writeFile(path3, a, true);
+
+        }
+
         void exportFTG()
         {
-            //if (checkFTG.IsChecked.Value)
-            //{
-            //    string path1 = path_root + "/N.txt";
-            //    string a = Math.Round(a1.f_p1, 2) + Environment.NewLine + "0";
-            //    TheTool.writeFile(path1, a, true);
-            //}
-            //if (checkFTG2.IsChecked.Value)
-            //{
-            //    string path2 = path_root + "/P.txt";
-            //    string b = Math.Round(a1.f_p2, 2) + Environment.NewLine + "0";
-            //    TheTool.writeFile(path2, b, true);
-            //}
-            //Console.WriteLine("P1=" + a1.f_p1 + " P2=" + a1.f_p2);
-
             if (checkFTG.IsChecked.Value)
             {
                 string path1 = path_root + "/N.txt";
@@ -215,6 +227,7 @@ namespace PTwitchCapture
         //===============================
 
         Timer myTimer;
+        Timer myTimer2;
         static volatile bool isRunning;
 
         public void initThread()
@@ -223,6 +236,8 @@ namespace PTwitchCapture
             myTimer.Interval = 1000;
             myTimer.Elapsed += myTimer_Elapsed;
             myTimer.Start();
+
+            
         }
 
         private void myTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -234,6 +249,7 @@ namespace PTwitchCapture
                 this.Dispatcher.Invoke((Action)(() =>
                 {
                     processV2_part2();
+                    readHPfile();
                     collectData2();
                 }));
                 if (isPause) { return; }
@@ -245,7 +261,12 @@ namespace PTwitchCapture
             finally { isRunning = false; }
         }
 
-        private void checkPause_Checked(object sender, RoutedEventArgs e)
+
+        private void myTimer2_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            getMsg("AutoMessage", "P2+");
+        }
+            private void checkPause_Checked(object sender, RoutedEventArgs e)
         {
             isPause = checkPause.IsChecked.Value;
         }
@@ -286,6 +307,8 @@ namespace PTwitchCapture
                 d.score_pos[i] = a2.score_pos[i];
                 d.score_neg[i] = a2.score_neg[i];
             }
+            d.hp_p1 = hp_p1;
+            d.hp_p2 = hp_p2;
             list_data.Add(d);
             i_d++;
             updateLogOfData();
@@ -310,13 +333,14 @@ namespace PTwitchCapture
         List<String> convertData2()
         {
             List<string> list = new List<String>();
-            list.Add("id,time,dominance,pos,pos1,pos2,neg,neg1,neg2,f_p1,f_p2");
+            list.Add("id,time,dominance,pos,pos1,pos2,neg,neg1,neg2,f_p1,f_p2,hp1,hp2");
             foreach (Data2 d in list_data)
             {
                 String t = d.i + "," + d.time + "," + d.dominance + "," +
                     d.score_pos[0] + "," + d.score_pos[1] + "," + d.score_pos[2] + "," +
                     d.score_neg[0] + "," + d.score_neg[1] + "," + d.score_neg[2] + "," +
-                    d.f_p1 + "," + d.f_p2;
+                    d.f_p1 + "," + d.f_p2 + "," +
+                    d.hp_p1 + "," + d.hp_p2;
                 list.Add(t);
             }
             return list;
@@ -339,7 +363,7 @@ namespace PTwitchCapture
             this.Dispatcher.Invoke((Action)(() =>
             {
                 int t = (i_d + 1);
-                String txt = "Total Sec: " + t + Environment.NewLine + 
+                String txt = "Total Sec: " + t + Environment.NewLine +
                 "Messages: " + list_data_msg.Count;
                 txtLog_Data.Text = txt;
             }));
@@ -423,6 +447,64 @@ namespace PTwitchCapture
             {
                 e.Cancel = true;
             }
+        }
+
+        //================================================
+
+        void readHPfile()
+        {
+            try
+            {
+
+                if (checkFTG_HP.IsChecked.Value)
+                {
+                    string path1 = path_root + "/p1HP.txt";
+                    string path2 = path_root + "/p2HP.txt";
+                    int h1 = TheTool.getInt(TheTool.read_File_get1String(path1));
+                    int h2 = TheTool.getInt(TheTool.read_File_get1String(path2));
+                    if (checkAutoReset.IsChecked.Value)
+                    {
+                        if (h1 > hp_p1 || h2 > hp_p2)
+                        {
+                            a1.reset();
+                            a2.reset();
+                            updateGUI();
+                        }
+                    }
+                    hp_p1 = h1;
+                    hp_p2 = h2;
+                    Console.WriteLine(hp_p1 + "_" + hp_p2);
+                }
+            }
+            catch { }
+        }
+
+        private void txtLog_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
+        }
+
+        private void startTime_Click(object sender, RoutedEventArgs e)
+        {
+            //Timer from create messages for P2
+            if(!fisrtClick)
+            {
+                fisrtClick = true;
+                myTimer2 = new Timer();
+                myTimer2.Interval = 60000 / (3 * int.Parse(numParti.Text));
+                myTimer2.Elapsed += myTimer2_Elapsed;
+                myTimer2.Start();
+                Console.WriteLine("start mytimer 2");
+            }
+            
+        }
+
+        private void stopTime_Click(object sender, RoutedEventArgs e)
+        {
+            myTimer2.Stop();
+            myTimer2.Dispose();
+            fisrtClick = false;
+            Console.WriteLine("stop mytimer 2");
         }
     }
 }

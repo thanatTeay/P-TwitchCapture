@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SoundCapture"
         mc:Ignorable="d"
-        Title="TwitchCapture" Height="307.132" Width="509.728" Icon="iconP.png">
+        Title="TwitchCapture" Height="347.674" Width="524.087" Icon="iconP.png">
     <Grid>
         <TabControl RenderTransformOrigin="0.5,0.5">
             <TabControl.RenderTransform>
@@ -18,13 +18,13 @@
             </TabControl.RenderTransform>
             <TabItem Header="Main">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox x:Name="txtLog" Margin="10,43,256,10" TextWrapping="Wrap" AcceptsReturn="True"
-                             AcceptsTab="True" Text="" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Uid="txtLog"/>
+                    <TextBox x:Name="txtLog" Margin="10,43,256,66" TextWrapping="Wrap" AcceptsReturn="True"
+                             AcceptsTab="True" Text="" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Uid="txtLog" TextChanged="txtLog_TextChanged"/>
                     <ProgressBar x:Name="progress_P2" HorizontalAlignment="Right" Margin="0,72,67,10" Width="28" Orientation="Vertical" Foreground="#FFD1D1D1"  Background="White" Minimum="-100" SmallChange="1"/>
                     <Label Content="- WEAK" HorizontalAlignment="Right" Margin="0,0,10,3" Width="53" Height="25" VerticalAlignment="Bottom"/>
                     <Label Content="- STRONG" HorizontalAlignment="Right" Margin="0,59,0,0" Width="64" Height="30" VerticalAlignment="Top"/>
                     <Label Content="- Normal" HorizontalAlignment="Right" Margin="0,128,0,64" Width="62" VerticalAlignment="Center" VerticalContentAlignment="Center" Foreground="Black" Height="56"/>
-                    <Button x:Name="butReset" Content="Reset" HorizontalAlignment="Left" Height="25" Margin="96,11,0,0" VerticalAlignment="Top" Width="59" FontSize="16" FontWeight="Bold" Click="butTune_Click" Background="White"/>
+                    <Button x:Name="butReset" Content="Reset" HorizontalAlignment="Left" Height="25" Margin="175,11,0,0" VerticalAlignment="Top" Width="53" FontSize="16" FontWeight="Bold" Click="butTune_Click" Background="White"/>
                     <ProgressBar x:Name="progress_P1" HorizontalAlignment="Right" Margin="0,72,99,10" Width="28" Orientation="Vertical" Foreground="#FFD1D1D1"  Background="White" Minimum="-100" SmallChange="1"/>
                     <Label Content="P2" HorizontalAlignment="Left" Margin="230,2,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Foreground="#FF006BD6"/>
                     <Label Content="P1" Margin="0,1,6,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" HorizontalAlignment="Right" Width="29" Foreground="#FF006BD6"/>
@@ -33,7 +33,12 @@
                         AcceptsTab="True" Text="" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Uid="txtLog" HorizontalAlignment="Right" Width="114" Background="Black" Foreground="Cyan"/>
                     <Label x:Name="txtP1" Content="P1" HorizontalAlignment="Right" Margin="0,39,98,166" FontSize="16" FontWeight="Bold" Foreground="Black"/>
                     <Label x:Name="txtP2" Content="P2" HorizontalAlignment="Right" Margin="0,39,64,166" FontSize="16" FontWeight="Bold" Foreground="Black"/>
-                    <CheckBox x:Name="checkPause" Content="Pause" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="11,13,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Checked="checkPause_Checked" Unchecked="checkPause_Checked"/>
+                    <CheckBox x:Name="checkPause" Content="Pause" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Checked="checkPause_Checked" Unchecked="checkPause_Checked"/>
+                    <CheckBox x:Name="checkAutoReset" Content="AutoRe" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="83,11,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Checked="checkPause_Checked" Unchecked="checkPause_Checked" IsChecked="True"/>
+                    <Button x:Name="startTime" Content="StartTime" HorizontalAlignment="Left" Margin="10,0,0,8" Width="79" Click="startTime_Click" Height="29" VerticalAlignment="Bottom"/>
+                    <Button x:Name="stopTime" Content="StopTime" HorizontalAlignment="Left" Margin="93,0,0,8" Width="79" Height="29" VerticalAlignment="Bottom" Click="stopTime_Click"/>
+                    <TextBox x:Name="numParti" HorizontalAlignment="Left" Height="23" Margin="177,0,0,10" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="77"/>
+                    <Label Content="Number of participant" Margin="114,0,255,38" Height="26" VerticalAlignment="Bottom"/>
 
                 </Grid>
             </TabItem>
@@ -64,6 +69,7 @@
                     <CheckBox x:Name="checkFTG2" Content="N.txt" HorizontalAlignment="Left" Margin="119,81,0,0" VerticalAlignment="Top" Uid="ftg_check" IsChecked="True"/>
                     <CheckBox x:Name="checkSentiment" Content="SentimentAnalysis" HorizontalAlignment="Left" Margin="59,196,0,0" VerticalAlignment="Top" Uid="ftg_check"/>
                     <CheckBox x:Name="checkV2" Content="ver2: sliding window" HorizontalAlignment="Left" Margin="59,176,0,0" VerticalAlignment="Top" Uid="ftg_check" IsChecked="True"/>
+                    <CheckBox x:Name="checkFTG_HP" Content="HP.txt" HorizontalAlignment="Left" Margin="119,118,0,0" VerticalAlignment="Top" Uid="ftg_check" IsChecked="True"/>
 
                 </Grid>
             </TabItem>

@@ -15,5 +15,8 @@ namespace PTwitchCapture
         public double dominance = 0;//[-1,1]
         public double f_p1 = 0;
         public double f_p2 = 0;
+        //
+        public int hp_p1 = 0;
+        public int hp_p2 = 0;
     }
 }
