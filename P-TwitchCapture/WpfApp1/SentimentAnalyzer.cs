@@ -9,6 +9,8 @@ namespace PTwitchCapture
 {
     class SentimentAnalyzer
     {
+        //UNUSED currently
+        //We don't use in current experiment
         private static readonly string BaseDatasetsRelativePath = @"../../../../Data";
         private static readonly string DataRelativePath = $"{BaseDatasetsRelativePath}/wikiDetoxAnnotated40kRows.tsv";
 

@@ -12,24 +12,10 @@ namespace PTwitchCapture
 
     public partial class MainWindow : Window
     {
+        bool initialized = false;
         int countP1 = 0;
         int countP2 = 0;
         bool fisrtClick = false;
-
-
-
-        public MainWindow()
-        {
-            countP1 = 0;
-            countP2 = 0;
-            TheTool.Sys = this;
-            InitializeComponent();
-            bot = new Bot(this);
-            applySetting();
-            initThread();
-
-            this.Closing += new System.ComponentModel.CancelEventHandler(Window4_Closing);
-        }
 
         Bot bot;
         Analysis1 a1 = new Analysis1();
@@ -39,9 +25,34 @@ namespace PTwitchCapture
         //get these data from FightingICE
         int hp_p1 = 0;
         int hp_p2 = 0;
-
-
+        //-------------------------------
+        Timer myTimer;//time thread for calculation
+        static volatile bool isRunning;
         //-----------------------------
+        bool isOneSideMode = false;
+        Timer oneSide_Timer;//time thread for calculation
+        int oneSide_numParticipant = 10;
+        double oneSide_avgMsg_perMinParticipant = 3;
+        int oneSide_generateEvery = 500;//ms
+        bool oneSide_nextDirection = true;// True: p2+, False: p1-
+
+
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            initialized = true;
+            countP1 = 0;
+            countP2 = 0;
+            TheTool.Sys = this;
+            bot = new Bot(this);
+            applySetting();
+            initThread();
+
+            oneSideMode_setUp();
+
+            this.Closing += new System.ComponentModel.CancelEventHandler(Window4_Closing);
+        }
 
 
         public void getMsg(string user, string msg)
@@ -53,11 +64,26 @@ namespace PTwitchCapture
                 Console.WriteLine("NewMsg: " + msg);
                 addTxtMsg(user, msg);
                 if (checkV2.IsChecked.Value) { processV2_part1(msg); }
-
-                //We don't use V1 recently
                 else { processV1(msg); }
+                //We don't use V1 recently
             }));
         }
+
+        //simulate Mock Msg
+        public void getMsg_autoP2(string msg)
+        {
+            //To handle GUI by Thread
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                if (isPause) { return; }
+                //Console.WriteLine("Mock: " + msg);
+                //addTxtMsg(user, msg);
+                if (checkV2.IsChecked.Value) { processV2_part1_autoP2(msg); }
+                else { processV1(msg); }
+                //We don't use V1 recently
+            }));
+        }
+
 
 
         public void addTxtMsg(string user, string msg)
@@ -88,13 +114,23 @@ namespace PTwitchCapture
             }
         }
 
-
+        //Part 1 invoked by Msg
         void processV2_part1(string msg)
         {
-            a2.addMsg(msg);
+            if (isOneSideMode) { }
+            else
+            {
+                a2.addMsg(msg, isOneSideMode);
+                countExport();
+            }
+        }
+        void processV2_part1_autoP2(string msg)
+        {
+            a2.addMsg(msg, false);
             countExport();
         }
 
+        //Part 2 runs every interval
         void processV2_part2()
         {
             a2.doUpdate();
@@ -197,6 +233,7 @@ namespace PTwitchCapture
         private void ButApply_Click(object sender, RoutedEventArgs e)
         {
             applySetting();
+            oneSideMode_setUp();
         }
 
         void applySetting()
@@ -226,18 +263,12 @@ namespace PTwitchCapture
 
         //===============================
 
-        Timer myTimer;
-        Timer myTimer2;
-        static volatile bool isRunning;
-
         public void initThread()
         {
             myTimer = new Timer();
             myTimer.Interval = 1000;
             myTimer.Elapsed += myTimer_Elapsed;
             myTimer.Start();
-
-            
         }
 
         private void myTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -259,16 +290,6 @@ namespace PTwitchCapture
                 Console.WriteLine("ERROR Timer: " + ex.ToString());
             }
             finally { isRunning = false; }
-        }
-
-
-        private void myTimer2_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            getMsg("AutoMessage", "P2+");
-        }
-            private void checkPause_Checked(object sender, RoutedEventArgs e)
-        {
-            isPause = checkPause.IsChecked.Value;
         }
 
         //==========================================================================================
@@ -473,7 +494,7 @@ namespace PTwitchCapture
                     }
                     hp_p1 = h1;
                     hp_p2 = h2;
-                    Console.WriteLine(hp_p1 + "_" + hp_p2);
+                    //Console.WriteLine(hp_p1 + "_" + hp_p2);
                 }
             }
             catch { }
@@ -483,28 +504,94 @@ namespace PTwitchCapture
         {
 
         }
+        //ONE SIDE MODE ===================================================================
 
-        private void startTime_Click(object sender, RoutedEventArgs e)
+
+        //private void startTime_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //Timer from create messages for P2
+        //    if(!fisrtClick)
+        //    {
+        //        fisrtClick = true;
+        //        myTimer2 = new Timer();
+        //        myTimer2.Interval = 60000 / (3 * int.Parse(numParti.Text));
+        //        myTimer2.Elapsed += myTimer2_Elapsed;
+        //        myTimer2.Start();
+        //        Console.WriteLine("start mytimer 2");
+        //    }
+
+        //}
+
+        //private void stopTime_Click(object sender, RoutedEventArgs e)
+        //{
+        //    myTimer2.Stop();
+        //    myTimer2.Dispose();
+        //    fisrtClick = false;
+        //    Console.WriteLine("stop mytimer 2");
+        //}
+
+        //private void myTimer2_Elapsed(object sender, ElapsedEventArgs e)
+        //{
+        //    getMsg("AutoMessage", "P2+");
+        //}
+
+
+        private void checkPause_Checked(object sender, RoutedEventArgs e)
         {
-            //Timer from create messages for P2
-            if(!fisrtClick)
+            isPause = checkPause.IsChecked.Value;
+        }
+
+        private void checkOneSide_Checked(object sender, RoutedEventArgs e)
+        {
+            oneSideMode_setUp();
+        }
+
+        void oneSideMode_setUp()
+        {
+            if (!initialized) { return;  }
+            try
             {
-                fisrtClick = true;
-                myTimer2 = new Timer();
-                myTimer2.Interval = 60000 / (3 * int.Parse(numParti.Text));
-                myTimer2.Elapsed += myTimer2_Elapsed;
-                myTimer2.Start();
-                Console.WriteLine("start mytimer 2");
+                if (oneSide_Timer != null)
+                {
+                    oneSide_Timer.Stop();
+                    oneSide_Timer.Dispose();
+                }
             }
-            
+            catch { }
+            isOneSideMode = checkOneside.IsChecked.Value;
+            //oneSide_generateEvery = int.Parse(txt_oneSide_rate.Text);
+            oneSide_generateEvery = TheTool.getInt(txt_oneSide_rate);
+            //
+            if (isOneSideMode) { oneSideMode_startTimer(); }
         }
 
-        private void stopTime_Click(object sender, RoutedEventArgs e)
+
+        private void oneSideMode_startTimer()
         {
-            myTimer2.Stop();
-            myTimer2.Dispose();
-            fisrtClick = false;
-            Console.WriteLine("stop mytimer 2");
+            oneSide_Timer = new Timer();
+            oneSide_Timer.Interval = oneSide_generateEvery;
+            oneSide_Timer.Elapsed += oneSide_Timer_Elapsed;
+            oneSide_Timer.Start();
         }
+
+        private void oneSide_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (oneSide_nextDirection) { getMsg_autoP2("P2+");  }
+            else { getMsg_autoP2("P1-");  }            
+            oneSide_nextDirection = !oneSide_nextDirection;
+        }
+
+        private void but_oneSide_cal_Click(object sender, RoutedEventArgs e)
+        {
+            oneSide_numParticipant = TheTool.getInt(txt_oneSide_numParticipant);
+            oneSide_avgMsg_perMinParticipant = TheTool.getDouble(txt_oneSide_avg);
+            double d = 60000 / (oneSide_avgMsg_perMinParticipant * oneSide_numParticipant);
+            oneSide_generateEvery = (int) d;
+            txt_oneSide_rate.Text = oneSide_generateEvery.ToString();
+        }
+
+
+        //ONE SIDE MODE ===================================================================
+
     }
 }

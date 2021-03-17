@@ -18,13 +18,13 @@
             </TabControl.RenderTransform>
             <TabItem Header="Main">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox x:Name="txtLog" Margin="10,43,256,66" TextWrapping="Wrap" AcceptsReturn="True"
+                    <TextBox x:Name="txtLog" Margin="10,62,256,10" TextWrapping="Wrap" AcceptsReturn="True"
                              AcceptsTab="True" Text="" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Uid="txtLog" TextChanged="txtLog_TextChanged"/>
                     <ProgressBar x:Name="progress_P2" HorizontalAlignment="Right" Margin="0,72,67,10" Width="28" Orientation="Vertical" Foreground="#FFD1D1D1"  Background="White" Minimum="-100" SmallChange="1"/>
                     <Label Content="- WEAK" HorizontalAlignment="Right" Margin="0,0,10,3" Width="53" Height="25" VerticalAlignment="Bottom"/>
                     <Label Content="- STRONG" HorizontalAlignment="Right" Margin="0,59,0,0" Width="64" Height="30" VerticalAlignment="Top"/>
                     <Label Content="- Normal" HorizontalAlignment="Right" Margin="0,128,0,64" Width="62" VerticalAlignment="Center" VerticalContentAlignment="Center" Foreground="Black" Height="56"/>
-                    <Button x:Name="butReset" Content="Reset" HorizontalAlignment="Left" Height="25" Margin="175,11,0,0" VerticalAlignment="Top" Width="53" FontSize="16" FontWeight="Bold" Click="butTune_Click" Background="White"/>
+                    <Button x:Name="butReset" Content="Reset" HorizontalAlignment="Left" Height="25" Margin="169,32,0,0" VerticalAlignment="Top" Width="53" FontSize="16" FontWeight="Bold" Click="butTune_Click" Background="White"/>
                     <ProgressBar x:Name="progress_P1" HorizontalAlignment="Right" Margin="0,72,99,10" Width="28" Orientation="Vertical" Foreground="#FFD1D1D1"  Background="White" Minimum="-100" SmallChange="1"/>
                     <Label Content="P2" HorizontalAlignment="Left" Margin="230,2,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Foreground="#FF006BD6"/>
                     <Label Content="P1" Margin="0,1,6,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" HorizontalAlignment="Right" Width="29" Foreground="#FF006BD6"/>
@@ -34,11 +34,8 @@
                     <Label x:Name="txtP1" Content="P1" HorizontalAlignment="Right" Margin="0,39,98,166" FontSize="16" FontWeight="Bold" Foreground="Black"/>
                     <Label x:Name="txtP2" Content="P2" HorizontalAlignment="Right" Margin="0,39,64,166" FontSize="16" FontWeight="Bold" Foreground="Black"/>
                     <CheckBox x:Name="checkPause" Content="Pause" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Checked="checkPause_Checked" Unchecked="checkPause_Checked"/>
-                    <CheckBox x:Name="checkAutoReset" Content="AutoRe" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="83,11,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Checked="checkPause_Checked" Unchecked="checkPause_Checked" IsChecked="True"/>
-                    <Button x:Name="startTime" Content="StartTime" HorizontalAlignment="Left" Margin="10,0,0,8" Width="79" Click="startTime_Click" Height="29" VerticalAlignment="Bottom"/>
-                    <Button x:Name="stopTime" Content="StopTime" HorizontalAlignment="Left" Margin="93,0,0,8" Width="79" Height="29" VerticalAlignment="Bottom" Click="stopTime_Click"/>
-                    <TextBox x:Name="numParti" HorizontalAlignment="Left" Height="23" Margin="177,0,0,10" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="77"/>
-                    <Label Content="Number of participant" Margin="114,0,255,38" Height="26" VerticalAlignment="Bottom"/>
+                    <CheckBox x:Name="checkAutoReset" Content="Reset on Round" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" IsChecked="True"/>
+                    <CheckBox x:Name="checkOneside" Content="One-side Mode" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="87,10,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Checked="checkOneSide_Checked" Unchecked="checkOneSide_Checked" IsChecked="True"/>
 
                 </Grid>
             </TabItem>
@@ -47,7 +44,7 @@
 
                 <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
                     <CheckBox x:Name="checkData_on" Content="Collecting Data" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="11,44,0,0" VerticalAlignment="Top" FontSize="16" Unchecked="checkData_on_Checked" Checked="checkData_on_Checked"/>
-                    <TextBox x:Name="txtLog_Data" Margin="10,74,10,64" TextWrapping="Wrap" AcceptsReturn="True"
+                    <TextBox x:Name="txtLog_Data" Margin="10,74,10,10" TextWrapping="Wrap" AcceptsReturn="True"
                         AcceptsTab="True" Text="" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Uid="txtLog"/>
                     <Button x:Name="butData_reset" Content="Reset" HorizontalAlignment="Right" Height="25" Margin="0,41,10,0" VerticalAlignment="Top" Width="59" FontSize="16" FontWeight="Bold" Background="White" Click="butData_reset_Click"/>
                     <Button x:Name="butData_export" Content="Export" HorizontalAlignment="Right" Height="25" Margin="0,41,226,0" VerticalAlignment="Top" Width="59" FontSize="16" FontWeight="Bold" Background="White" Click="butData_export_Click"/>
@@ -61,15 +58,37 @@
             <TabItem Header="Settings">
                 <Grid Background="#FFE5E5E5" Margin="0,0,-2,-4">
 
-                    <Label Content="Folder:" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="txtFile" HorizontalAlignment="Left" Height="23" Margin="59,50,0,0" TextWrapping="Wrap" Text="D:/FTGexp/F" VerticalAlignment="Top" Width="105" Uid="txtFile"/>
+                    <CheckBox x:Name="checkSentiment" Content="SentimentAnalysis" HorizontalAlignment="Left" Margin="10,87,0,0" VerticalAlignment="Top" Uid="ftg_check"/>
+                    <CheckBox x:Name="checkV2" Content="Code Ver2: sliding window method" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Uid="ftg_check" IsChecked="True"/>
                     <Button x:Name="butApply" Content="Apply Settings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="122" RenderTransformOrigin="0.373,0.8" Height="32" Click="ButApply_Click" FontWeight="Bold" FontSize="16"/>
 
-                    <CheckBox x:Name="checkFTG" Content="P.txt" HorizontalAlignment="Left" Margin="57,81,0,0" VerticalAlignment="Top" Uid="ftg_check" IsChecked="True"/>
-                    <CheckBox x:Name="checkFTG2" Content="N.txt" HorizontalAlignment="Left" Margin="119,81,0,0" VerticalAlignment="Top" Uid="ftg_check" IsChecked="True"/>
-                    <CheckBox x:Name="checkSentiment" Content="SentimentAnalysis" HorizontalAlignment="Left" Margin="59,196,0,0" VerticalAlignment="Top" Uid="ftg_check"/>
-                    <CheckBox x:Name="checkV2" Content="ver2: sliding window" HorizontalAlignment="Left" Margin="59,176,0,0" VerticalAlignment="Top" Uid="ftg_check" IsChecked="True"/>
-                    <CheckBox x:Name="checkFTG_HP" Content="HP.txt" HorizontalAlignment="Left" Margin="119,118,0,0" VerticalAlignment="Top" Uid="ftg_check" IsChecked="True"/>
+
+                    <GroupBox Header="Read-Write files" HorizontalAlignment="Left" Height="126" Margin="234,0,0,0" VerticalAlignment="Top" Width="268">
+                        <Grid>
+
+                            <CheckBox x:Name="checkFTG_HP" Content="HP1.txt , HP2.txt (HP Data)" HorizontalAlignment="Left" Margin="68,77,0,0" VerticalAlignment="Top" Uid="ftg_check" IsChecked="True"/>
+                            <Label Content="Folder:" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top"/>
+                            <TextBox x:Name="txtFile" HorizontalAlignment="Left" Height="23" Margin="59,10,0,0" TextWrapping="Wrap" Text="D:/FTGexp/F" VerticalAlignment="Top" Width="105" Uid="txtFile"/>
+                            <CheckBox x:Name="checkFTG" Content="P.txt (P1's Strength)" HorizontalAlignment="Left" Margin="68,38,0,0" VerticalAlignment="Top" Uid="ftg_check" IsChecked="True"/>
+                            <CheckBox x:Name="checkFTG2" Content="N.txt (P2's Strength)" HorizontalAlignment="Left" Margin="68,57,0,0" VerticalAlignment="Top" Uid="ftg_check" IsChecked="True"/>
+
+
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="One-side Mode (Ver 2 only)" HorizontalAlignment="Left" Height="152" Margin="234,131,0,0" VerticalAlignment="Top" Width="268">
+                        <Grid>
+                            <TextBox x:Name="txt_oneSide_numParticipant" HorizontalAlignment="Left" Height="23" Margin="170,0,0,40" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="59" TextAlignment="Center" RenderTransformOrigin="0.5,0.5" Background="#FFC4E5F7">
+                            </TextBox>
+                            <Label Content="Number of participant" Margin="6,0,91,37" Height="26" VerticalAlignment="Bottom"/>
+                            <Label x:Name="txt_oneSide_label1" Content="Rate: create 1 msg every" Margin="6,0,104,99" Height="26" VerticalAlignment="Bottom"/>
+                            <TextBox x:Name="txt_oneSide_rate" HorizontalAlignment="Left" Height="23" Margin="157,0,0,102" TextWrapping="Wrap" Text="500" VerticalAlignment="Bottom" Width="59" TextAlignment="Center" RenderTransformOrigin="0.5,0.5"/>
+                            <Label x:Name="txt_oneSide_label1_Copy" Content="ms" Margin="221,0,10,99" Height="26" VerticalAlignment="Bottom"/>
+                            <Button x:Name="but_oneSide_cal" Content="Calculate Rate" HorizontalAlignment="Left" Margin="53,35,0,0" VerticalAlignment="Top" Width="146" Background="#FF5FABD6" FontWeight="Bold" Click="but_oneSide_cal_Click"/>
+                            <TextBox x:Name="txt_oneSide_avg" HorizontalAlignment="Left" Height="23" Margin="170,0,0,9" TextWrapping="Wrap" Text="3" VerticalAlignment="Bottom" Width="59" TextAlignment="Center" RenderTransformOrigin="0.5,0.5" Background="#FFC4E5F7"/>
+                            <Label Content="Average msg/min/person" Margin="6,0,91,6" Height="26" VerticalAlignment="Bottom"/>
+
+                        </Grid>
+                    </GroupBox>
 
                 </Grid>
             </TabItem>

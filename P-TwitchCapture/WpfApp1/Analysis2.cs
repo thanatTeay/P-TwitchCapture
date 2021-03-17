@@ -104,7 +104,7 @@ namespace PTwitchCapture
 
         //------------
 
-        public void addMsg(string m0)
+        public void addMsg(string m0, Boolean skipP2)
         {
             string m = m0.Replace("p","P");
             if (m.Contains("P1+"))
@@ -113,13 +113,13 @@ namespace PTwitchCapture
                 list_msg.Add(tm);
                 processMsg(tm, false);
             }
-            if (m.Contains("P2+"))
+            if (!skipP2 && m.Contains("P2+"))
             {
                 TMessage tm = new TMessage() { txt = m, type = 2 };
                 list_msg.Add(tm);
                 processMsg(tm, false);
             }
-            if (m.Contains("P1-"))
+            if (!skipP2 && m.Contains("P1-"))
             {
                 TMessage tm = new TMessage() { txt = m, type = 3 };
                 list_msg.Add(tm);
