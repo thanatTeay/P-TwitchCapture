@@ -117,17 +117,20 @@ namespace PTwitchCapture
         //Part 1 invoked by Msg
         void processV2_part1(string msg)
         {
-            if (isOneSideMode) { }
+            if (isOneSideMode) {
+                a2.addMsg(msg, isOneSideMode);
+                countExport(); //for P1 vs P2
+            }
             else
             {
                 a2.addMsg(msg, isOneSideMode);
-                countExport();
+                countExport(); //for P1 vs P2
             }
         }
         void processV2_part1_autoP2(string msg)
         {
             a2.addMsg(msg, false);
-            countExport();
+            //countExport(); //for P1 vs P2
         }
 
         //Part 2 runs every interval
@@ -197,7 +200,7 @@ namespace PTwitchCapture
         public void showError(string s) { Console.WriteLine("EX " + s); }
         public void showError(Exception ex) { Console.WriteLine("EX " + ex.ToString()); }
 
-        void countExport()
+        public void countExport()
         {
             string path3 = path_root + "/countP1.txt";
             countP1++;
@@ -490,6 +493,7 @@ namespace PTwitchCapture
                             a1.reset();
                             a2.reset();
                             updateGUI();
+                            countP1 = 0;
                         }
                     }
                     hp_p1 = h1;
@@ -588,7 +592,15 @@ namespace PTwitchCapture
             double d = 60000 / (oneSide_avgMsg_perMinParticipant * oneSide_numParticipant);
             oneSide_generateEvery = (int) d;
             txt_oneSide_rate.Text = oneSide_generateEvery.ToString();
+            oneSide_Timer.Stop();
+            oneSide_Timer.Dispose();
+            oneSideMode_startTimer();
         }
+
+       /* private void checkAutoReset_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }*/
 
 
         //ONE SIDE MODE ===================================================================

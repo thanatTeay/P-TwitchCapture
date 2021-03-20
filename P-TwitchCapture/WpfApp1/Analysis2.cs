@@ -22,7 +22,7 @@ namespace PTwitchCapture
         public double f_p2 = 0;
         public double f_p1_gui = 0;
         public double f_p2_gui = 0;
-
+        static public MainWindow mainWin1 = new MainWindow();
         int timeWindow = 15000;//15sec
 
         public void reset()
@@ -102,6 +102,10 @@ namespace PTwitchCapture
             f_p2_gui = -bal_gui;
         }
 
+
+      
+
+
         //------------
 
         public void addMsg(string m0, Boolean skipP2)
@@ -111,24 +115,31 @@ namespace PTwitchCapture
             {
                 TMessage tm = new TMessage() { txt = m, type = 1};
                 list_msg.Add(tm);
+                Console.WriteLine("test P1+++++++++++++++");
+                //mainWin1.countExport();
                 processMsg(tm, false);
+
             }
             if (!skipP2 && m.Contains("P2+"))
             {
                 TMessage tm = new TMessage() { txt = m, type = 2 };
                 list_msg.Add(tm);
+                //Console.WriteLine("test P2+++++++++++++++");
                 processMsg(tm, false);
             }
             if (!skipP2 && m.Contains("P1-"))
             {
                 TMessage tm = new TMessage() { txt = m, type = 3 };
                 list_msg.Add(tm);
+                //Console.WriteLine("test P1---------------");
                 processMsg(tm, false);
             }
             if (m.Contains("P2-"))
             {
                 TMessage tm = new TMessage() { txt = m, type = 4 };
                 list_msg.Add(tm);
+                Console.WriteLine("test P2---------------");
+                //mainWin1.countExport();
                 processMsg(tm, false);
             }
         }
