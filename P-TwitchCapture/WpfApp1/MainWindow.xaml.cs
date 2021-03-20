@@ -33,7 +33,7 @@ namespace PTwitchCapture
         Timer oneSide_Timer;//time thread for calculation
         int oneSide_numParticipant = 10;
         double oneSide_avgMsg_perMinParticipant = 3;
-        int oneSide_generateEvery = 500;//ms
+        int oneSide_generateEvery = 2000;//ms
         bool oneSide_nextDirection = true;// True: p2+, False: p1-
 
 
@@ -493,6 +493,8 @@ namespace PTwitchCapture
                             a1.reset();
                             a2.reset();
                             updateGUI();
+                            CountToAdjustStrength();
+                            Console.WriteLine("text one side = "+ txt_oneSide_avg);
                             countP1 = 0;
                         }
                     }
@@ -595,6 +597,30 @@ namespace PTwitchCapture
             oneSide_Timer.Stop();
             oneSide_Timer.Dispose();
             oneSideMode_startTimer();
+        }
+
+        private void CountToAdjustStrength()
+        {
+            oneSide_numParticipant = TheTool.getInt(txt_oneSide_numParticipant);
+            double sum = countP1 / oneSide_numParticipant;
+            if(sum >= 3)
+            {
+                sum += 1;
+            }
+            else
+            {
+                sum = 3;
+            }
+            Console.WriteLine("sum = " + sum);
+            double d = 60000 / (sum * oneSide_numParticipant);
+            oneSide_generateEvery = (int)d;
+            txt_oneSide_rate.Text = oneSide_generateEvery.ToString();
+            txt_oneSide_avg.Text = sum.ToString();
+            oneSide_Timer.Stop();
+            oneSide_Timer.Dispose();
+            oneSideMode_startTimer();
+
+
         }
 
        /* private void checkAutoReset_Checked(object sender, RoutedEventArgs e)
