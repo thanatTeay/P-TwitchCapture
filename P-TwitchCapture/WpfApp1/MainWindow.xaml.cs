@@ -6,6 +6,7 @@ using System.Timers;
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
+using System.Linq;
 
 namespace PTwitchCapture
 {
@@ -15,7 +16,8 @@ namespace PTwitchCapture
         bool initialized = false;
         int countP1 = 0;
         int countP2 = 0;
-        bool fisrtClick = false;
+        int countForPrintdata = 0;
+        bool fisrtClick = false, firstTime = false;
 
         Bot bot;
         Analysis1 a1 = new Analysis1();
@@ -44,8 +46,16 @@ namespace PTwitchCapture
             initialized = true;
             countP1 = 0;
             countP2 = 0;
+            firstTime = false;
+            
             TheTool.Sys = this;
             bot = new Bot(this);
+            string path1 = path_root + "/p1HP.txt";
+            string path2 = path_root + "/p2HP.txt";
+            int h1 = TheTool.getInt(TheTool.read_File_get1String(path1));
+            int h2 = TheTool.getInt(TheTool.read_File_get1String(path2));
+            hp_p1 = h1;
+            hp_p2 = h2;
             applySetting();
             initThread();
 
@@ -54,7 +64,9 @@ namespace PTwitchCapture
             this.Closing += new System.ComponentModel.CancelEventHandler(Window4_Closing);
         }
 
+        
 
+     
         public void getMsg(string user, string msg)
         {
             //To handle GUI by Thread
@@ -119,6 +131,7 @@ namespace PTwitchCapture
         {
             if (isOneSideMode) {
                 a2.addMsg(msg, isOneSideMode);
+    
                 countExport(); //for P1 vs P2
             }
             else
@@ -196,6 +209,7 @@ namespace PTwitchCapture
 
         //setting
         string path_root = "file";
+        string path_rank = @"C:\Users\maili\Desktop\ShareFolder\Ranking\";
         public void showError(string s, Boolean b) { Console.WriteLine("EX " + s); }
         public void showError(string s) { Console.WriteLine("EX " + s); }
         public void showError(Exception ex) { Console.WriteLine("EX " + ex.ToString()); }
@@ -283,6 +297,7 @@ namespace PTwitchCapture
                 this.Dispatcher.Invoke((Action)(() =>
                 {
                     processV2_part2();
+                
                     readHPfile();
                     collectData2();
                 }));
@@ -301,6 +316,7 @@ namespace PTwitchCapture
         int i_d = 0;//index of data
         List<Data2> list_data = new List<Data2>();
         List<Data_Message> list_data_msg = new List<Data_Message>();
+        List<TwitchCountData> countData = new List<TwitchCountData>();
 
         //public static string path_saveFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\file";
         public static string path_saveFolder = "file";
@@ -312,6 +328,7 @@ namespace PTwitchCapture
             i_d = 0;
             list_data.Clear();
             list_data_msg.Clear();
+            countData.Clear();
             updateLogOfData();
         }
 
@@ -351,7 +368,34 @@ namespace PTwitchCapture
                 user = user0,
                 msg = msg0
             };
-            list_data_msg.Add(dm);
+            list_data_msg.Add(dm); 
+        }
+
+        public void groupAndcountUser()
+        {
+            List<string> list = new List<String>();
+            list.Add("id,count");
+            var GroupUser = from twitchID in list_data_msg
+                            group twitchID by twitchID.user into twitchIDGroup
+                            select new
+                            {
+                                ID = twitchIDGroup.Key,
+                                Count = twitchIDGroup.Count(),
+                            };
+
+            GroupUser = GroupUser.OrderByDescending(x => x.Count).ToList();
+            foreach (var item in GroupUser)
+            {
+
+                String t = item.ID + "," + item.Count ;
+                list.Add(t);
+                
+            }
+            bot.client.SendMessage("ligoligo12", "See your Ranking: https://drive.google.com/file/d/1GhTUtZX4aEXjhY-BznR0RqYfVtY3lDTE/view?usp=sharing");
+            string path = path_rank + "Ranking.csv";
+            TheTool.exportCSV_orTXT(path, list, false);
+
+
         }
 
         List<String> convertData2()
@@ -382,6 +426,7 @@ namespace PTwitchCapture
             return list;
         }
 
+        
         void updateLogOfData()
         {
             this.Dispatcher.Invoke((Action)(() =>
@@ -390,6 +435,7 @@ namespace PTwitchCapture
                 String txt = "Total Sec: " + t + Environment.NewLine +
                 "Messages: " + list_data_msg.Count;
                 txtLog_Data.Text = txt;
+
             }));
         }
 
@@ -488,15 +534,19 @@ namespace PTwitchCapture
                     int h2 = TheTool.getInt(TheTool.read_File_get1String(path2));
                     if (checkAutoReset.IsChecked.Value)
                     {
-                        if (h1 > hp_p1 || h2 > hp_p2)
+                        if (h1 > hp_p1 ) // 0 > -322 h1 > hp_p1 && firstTime == true   0 > -100
                         {
+                           
                             a1.reset();
                             a2.reset();
                             updateGUI();
                             CountToAdjustStrength();
+                            groupAndcountUser();
                             Console.WriteLine("text one side = "+ txt_oneSide_avg);
                             countP1 = 0;
+                            
                         }
+                        
                     }
                     hp_p1 = h1;
                     hp_p2 = h2;
@@ -623,10 +673,16 @@ namespace PTwitchCapture
 
         }
 
-       /* private void checkAutoReset_Checked(object sender, RoutedEventArgs e)
+        class TwitchCountData
         {
+            public String txt = "";
+            public int count = 0;
+        }
 
-        }*/
+        /* private void checkAutoReset_Checked(object sender, RoutedEventArgs e)
+         {
+
+         }*/
 
 
         //ONE SIDE MODE ===================================================================

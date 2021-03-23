@@ -28,7 +28,7 @@ namespace PTwitchCapture
         public static string client_id = "gp762nuuoqcoxypju8c569th9wz7q5";
         public static string channel = "ligoligo12";
 
-        TwitchClient client;
+        public TwitchClient client;
         MainWindow main;
         public Bot(MainWindow m)
         {
@@ -51,6 +51,7 @@ namespace PTwitchCapture
             client.OnNewSubscriber += Client_OnNewSubscriber;
             client.OnConnected += Client_OnConnected;
 
+
             client.Connect();
         }
 
@@ -72,11 +73,14 @@ namespace PTwitchCapture
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
-            if (e.ChatMessage.Message.Contains("badword"))
-                client.TimeoutUser(e.ChatMessage.Channel, e.ChatMessage.Username, TimeSpan.FromMinutes(30), "Bad word! 30 minute timeout!");
+            //if (e.ChatMessage.Message.Contains("badword"))
+            //    client.TimeoutUser(e.ChatMessage.Channel, e.ChatMessage.Username, TimeSpan.FromMinutes(30), "Bad word! 30 minute timeout!");
 
             //Console.WriteLine($"NewMsg " + e.ChatMessage.Message);
-            main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
+//            if(e.ChatMessage.Username != "ligoligo12")
+//            {
+                main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
+ //           }
         }
 
         private void Client_OnWhisperReceived(object sender, OnWhisperReceivedArgs e)

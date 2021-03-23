@@ -19,4 +19,5 @@ namespace PTwitchCapture
         public int hp_p1 = 0;
         public int hp_p2 = 0;
     }
+
 }

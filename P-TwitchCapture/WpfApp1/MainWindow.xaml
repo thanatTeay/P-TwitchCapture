@@ -55,7 +55,7 @@
             </TabItem>
 
 
-            <TabItem Header="Settings">
+            <TabItem Header="Settings" Height="22" VerticalAlignment="Top">
                 <Grid Background="#FFE5E5E5" Margin="0,0,-2,-4">
 
                     <CheckBox x:Name="checkSentiment" Content="SentimentAnalysis" HorizontalAlignment="Left" Margin="10,87,0,0" VerticalAlignment="Top" Uid="ftg_check"/>
@@ -81,7 +81,7 @@
                             </TextBox>
                             <Label Content="Number of participant" Margin="6,0,91,37" Height="26" VerticalAlignment="Bottom"/>
                             <Label x:Name="txt_oneSide_label1" Content="Rate: create 1 msg every" Margin="6,0,104,99" Height="26" VerticalAlignment="Bottom"/>
-                            <TextBox x:Name="txt_oneSide_rate" HorizontalAlignment="Left" Height="23" Margin="157,0,0,102" TextWrapping="Wrap" Text="500" VerticalAlignment="Bottom" Width="59" TextAlignment="Center" RenderTransformOrigin="0.5,0.5"/>
+                            <TextBox x:Name="txt_oneSide_rate" HorizontalAlignment="Left" Height="23" Margin="157,0,0,102" TextWrapping="Wrap" Text="2000" VerticalAlignment="Bottom" Width="59" TextAlignment="Center" RenderTransformOrigin="0.5,0.5"/>
                             <Label x:Name="txt_oneSide_label1_Copy" Content="ms" Margin="221,0,10,99" Height="26" VerticalAlignment="Bottom"/>
                             <Button x:Name="but_oneSide_cal" Content="Calculate Rate" HorizontalAlignment="Left" Margin="53,35,0,0" VerticalAlignment="Top" Width="146" Background="#FF5FABD6" FontWeight="Bold" Click="but_oneSide_cal_Click"/>
                             <TextBox x:Name="txt_oneSide_avg" HorizontalAlignment="Left" Height="23" Margin="170,0,0,9" TextWrapping="Wrap" Text="3" VerticalAlignment="Bottom" Width="59" TextAlignment="Center" RenderTransformOrigin="0.5,0.5" Background="#FFC4E5F7"/>

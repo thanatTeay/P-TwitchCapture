@@ -13,4 +13,11 @@ namespace PTwitchCapture
         public String user = "";
         public String msg = "";
     }
+
+
+    class Data_MessageType
+    {
+        public String user = "";
+        public String count = "";
+    }
 }

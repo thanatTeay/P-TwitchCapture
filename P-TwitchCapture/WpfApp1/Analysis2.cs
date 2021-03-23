@@ -9,6 +9,7 @@ namespace PTwitchCapture
     class Analysis2
     {
         List<TMessage> list_msg = new List<TMessage>();
+        
 
         //Index: 0 Total, 1 P1, P2
         public int[] score_pos = { 0, 0, 0 };//positive: Total, P1, P2
@@ -28,6 +29,7 @@ namespace PTwitchCapture
         public void reset()
         {
             list_msg.Clear();
+
             score_pos = new int[] { 0, 0, 0 };
             score_neg = new int[] { 0, 0, 0 };
             dominance = 0;
@@ -177,5 +179,7 @@ namespace PTwitchCapture
         public int type = 0;//0,1:P1+,2:P2+,3:P1-,2:P2-
         public DateTime time = DateTime.Now;
     }
+
+   
 
 }
