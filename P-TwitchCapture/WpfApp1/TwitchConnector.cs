@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TwitchLib.Client;
 using TwitchLib.Client.Enums;
 using TwitchLib.Client.Events;
@@ -33,14 +34,24 @@ namespace PTwitchCapture
         public Bot(MainWindow m)
         {
             main = m;
+            //createClient();
+        }
+
+        public void createClient()
+        {
             //ConnectionCredentials credentials = new ConnectionCredentials("twitch_username", "access_token");
             ConnectionCredentials credentials = new ConnectionCredentials(twitch_username, access_token);
             var clientOptions = new ClientOptions
             {
                 MessagesAllowedInPeriod = 750,
-                ThrottlingPeriod = TimeSpan.FromSeconds(30)
+
+                ThrottlingPeriod = TimeSpan.FromSeconds(30),
+                //SendDelay = 1000
+
             };
+
             WebSocketClient customClient = new WebSocketClient(clientOptions);
+
             client = new TwitchClient(customClient);
             client.Initialize(credentials, channel);
 
@@ -51,9 +62,10 @@ namespace PTwitchCapture
             client.OnNewSubscriber += Client_OnNewSubscriber;
             client.OnConnected += Client_OnConnected;
 
-
             client.Connect();
+            //client_g.Connect();
         }
+
 
         private void Client_OnLog(object sender, OnLogArgs e)
         {
@@ -63,13 +75,79 @@ namespace PTwitchCapture
         private void Client_OnConnected(object sender, OnConnectedArgs e)
         {
             Console.WriteLine($"Connected to {e.AutoJoinChannel}");
+
+            client_g = client;
         }
 
         private void Client_OnJoinedChannel(object sender, OnJoinedChannelArgs e)
         {
-            Console.WriteLine("Hey guys! I am a moderator AI");
-            client.SendMessage(e.Channel, "Hey guys! I am a moderator AI");
+            //Console.WriteLine("Hey guys! I am a moderator AI" + ii);ii++;
+            //Console.WriteLine("Hey guys! I am a moderator AI");
+            //client.SendMessage(e.Channel, "Hey guys! I am a moderator AI");
+            botSpeak(e.Channel, "Hey guys! I am a moderator AI");
         }
+
+
+
+        int ii = 0;
+        DateTime nextMsg = DateTime.Now;
+        public void botSpeak(string sender,string txt)
+        {
+            DateTime timeA = DateTime.Now;
+            if (timeA > nextMsg)
+            {
+                Console.WriteLine(txt);
+                //client.SendMessage(sender, txt);
+                client.SendMessage(sender, txt + "_" + ii); ii++;
+
+                //client.SendMessage(sender, txt + "_" + ii, true); ii++;
+                //client.SendMessage(sender, txt + "X" + ii, false); ii++;
+                //client.SendRaw(txt + "R" + ii); ii++;
+                //client.SendQueuedItem(txt + "Q" + ii); ii++;
+
+                //public void SendMessage(string channel, string message, bool dryRun = false);
+                //public void SendMessage(JoinedChannel channel, string message, bool dryRun = false);
+                //public void SendQueuedItem(string message);
+                //public void SendRaw(string message);
+
+
+                nextMsg = timeA.AddMilliseconds(2000);
+            }
+        }
+
+
+        public static TwitchClient client_g;
+        public static int ii_g = 0;
+        public static DateTime nextMsg_g = DateTime.Now;
+        public static void botSpeakGlobal(string sender, string txt)
+        {
+            DateTime timeA = DateTime.Now;
+            if (timeA > nextMsg_g)
+            {
+                Console.WriteLine(txt);
+                //client.SendMessage(sender, txt);
+                client_g.SendMessage(sender, txt + "_" + ii_g); ii_g++;
+                nextMsg_g = timeA.AddMilliseconds(2000);
+            }
+        }
+
+        //PREVENT DUPLICATED MESSAGES BY MULTIPLE BOT
+        public static void botSpeakListGlobal(string sender, List<string> ltxt)
+        {
+            DateTime timeA = DateTime.Now;
+            if (timeA > nextMsg_g)
+            {
+                foreach(string txt in ltxt)
+                {
+                    Console.WriteLine(txt);
+                    //client.SendMessage(sender, txt);
+                    client_g.SendMessage(sender, txt );
+                }
+                nextMsg_g = timeA.AddMilliseconds(2000);
+            }
+        }
+
+
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
@@ -77,10 +155,10 @@ namespace PTwitchCapture
             //    client.TimeoutUser(e.ChatMessage.Channel, e.ChatMessage.Username, TimeSpan.FromMinutes(30), "Bad word! 30 minute timeout!");
 
             //Console.WriteLine($"NewMsg " + e.ChatMessage.Message);
-//            if(e.ChatMessage.Username != "ligoligo12")
-//            {
+           if(e.ChatMessage.Username != "ligoligo12")
+           {
                 main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
- //           }
+           }
         }
 
         private void Client_OnWhisperReceived(object sender, OnWhisperReceivedArgs e)

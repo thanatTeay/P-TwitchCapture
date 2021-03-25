@@ -50,6 +50,7 @@ namespace PTwitchCapture
             
             TheTool.Sys = this;
             bot = new Bot(this);
+            bot.createClient();
             string path1 = path_root + "/p1HP.txt";
             string path2 = path_root + "/p2HP.txt";
             int h1 = TheTool.getInt(TheTool.read_File_get1String(path1));
@@ -129,6 +130,7 @@ namespace PTwitchCapture
         //Part 1 invoked by Msg
         void processV2_part1(string msg)
         {
+            
             if (isOneSideMode) {
                 a2.addMsg(msg, isOneSideMode);
     
@@ -143,6 +145,7 @@ namespace PTwitchCapture
         void processV2_part1_autoP2(string msg)
         {
             a2.addMsg(msg, false);
+
             //countExport(); //for P1 vs P2
         }
 
@@ -288,8 +291,11 @@ namespace PTwitchCapture
             myTimer.Start();
         }
 
+
+        Boolean botStarted = false;
         private void myTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            //if (botStarted) { bot.createClient(); }
             if (isRunning) return;
             isRunning = true;
             try
@@ -371,10 +377,14 @@ namespace PTwitchCapture
             list_data_msg.Add(dm); 
         }
 
+        int itest = 0;
         public void groupAndcountUser()
         {
             List<string> list = new List<String>();
-            list.Add("id,count");
+            List<string> plist = new List<String>();
+            plist.Add("Name,Score");
+            list.Add("Scoreboard");
+            list.Add("=======================");
             var GroupUser = from twitchID in list_data_msg
                             group twitchID by twitchID.user into twitchIDGroup
                             select new
@@ -384,17 +394,23 @@ namespace PTwitchCapture
                             };
 
             GroupUser = GroupUser.OrderByDescending(x => x.Count).ToList();
+
             foreach (var item in GroupUser)
             {
 
-                String t = item.ID + "," + item.Count ;
-                list.Add(t);
-                
-            }
-            bot.client.SendMessage("ligoligo12", "See your Ranking: https://drive.google.com/file/d/1GhTUtZX4aEXjhY-BznR0RqYfVtY3lDTE/view?usp=sharing");
-            string path = path_rank + "Ranking.csv";
-            TheTool.exportCSV_orTXT(path, list, false);
+                String t = "Name: " + item.ID + ", Score: " + item.Count;
+                String pt = item.ID + "," + item.Count;
 
+
+                list.Add(t);
+                plist.Add(pt);
+
+            }
+            list.Add("=======================");
+            list.Add("See your ranking: https://drive.google.com/file/d/1GhTUtZX4aEXjhY-BznR0RqYfVtY3lDTE/view?usp=sharing");
+            Bot.botSpeakListGlobal("ligoligo12", list);
+            string path = path_rank + "Ranking.csv";
+            TheTool.exportCSV_orTXT(path, plist, false);
 
         }
 
