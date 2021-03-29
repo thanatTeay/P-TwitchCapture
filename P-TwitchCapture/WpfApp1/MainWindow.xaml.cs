@@ -63,6 +63,7 @@ namespace PTwitchCapture
             oneSideMode_setUp();
 
             this.Closing += new System.ComponentModel.CancelEventHandler(Window4_Closing);
+            
         }
 
         
@@ -533,6 +534,16 @@ namespace PTwitchCapture
             {
                 e.Cancel = true;
             }
+            if (result == MessageBoxResult.Yes)
+            {
+                e.Cancel = false;
+                exportData(true);
+                oneSide_Timer.Stop();
+                oneSide_Timer.Dispose();
+                myTimer.Stop();
+                myTimer.Dispose();
+
+            }
         }
 
         //================================================
@@ -648,9 +659,13 @@ namespace PTwitchCapture
 
         private void oneSide_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (oneSide_nextDirection) { getMsg_autoP2("P2+");  }
-            else { getMsg_autoP2("P1-");  }            
+            if (oneSide_nextDirection) { getMsg_autoP2("AutoP2");  }
+            else { getMsg_autoP2("AutoP1");  }            
             oneSide_nextDirection = !oneSide_nextDirection;
+
+            /*if (oneSide_nextDirection) { getMsg_autoP2("P2+"); }
+            else { getMsg_autoP2("P1-"); }
+            oneSide_nextDirection = !oneSide_nextDirection;*/
         }
 
         private void but_oneSide_cal_Click(object sender, RoutedEventArgs e)
@@ -671,12 +686,9 @@ namespace PTwitchCapture
             double sum = countP1 / oneSide_numParticipant;
             if(sum >= 3)
             {
-                sum += 1;
-            }
-            else
-            {
                 sum = 3;
             }
+            
             Console.WriteLine("sum = " + sum);
             double d = 60000 / (sum * oneSide_numParticipant);
             oneSide_generateEvery = (int)d;
@@ -704,4 +716,6 @@ namespace PTwitchCapture
         //ONE SIDE MODE ===================================================================
 
     }
+
+   
 }

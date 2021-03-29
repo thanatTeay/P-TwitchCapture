@@ -113,9 +113,42 @@ namespace PTwitchCapture
         public void addMsg(string m0, Boolean skipP2)
         {
             string m = m0.Replace("p","P");
-            if (m.Contains("P1+"))
+            if (m.Contains("+"))
             {
                 TMessage tm = new TMessage() { txt = m, type = 1};
+                list_msg.Add(tm);
+                Console.WriteLine("test P1+++++++++++++++");
+                //mainWin1.countExport();
+                processMsg(tm, false);
+
+            }
+            if (!skipP2 && m.Contains("AutoP2"))
+            {
+                TMessage tm = new TMessage() { txt = m, type = 2 };
+                list_msg.Add(tm);
+                //Console.WriteLine("test P2+++++++++++++++");
+                processMsg(tm, false);
+            }
+            if (!skipP2 && m.Contains("AutoP1"))
+            {
+                TMessage tm = new TMessage() { txt = m, type = 3 };
+                list_msg.Add(tm);
+                //Console.WriteLine("test P1---------------");
+                processMsg(tm, false);
+            }
+            if (m.Contains("-"))
+            {
+                TMessage tm = new TMessage() { txt = m, type = 4 };
+                list_msg.Add(tm);
+                Console.WriteLine("test P2---------------");
+                //mainWin1.countExport();
+                processMsg(tm, false);
+            }
+
+            /*string m = m0.Replace("p", "P");
+            if (m.Contains("P1+"))
+            {
+                TMessage tm = new TMessage() { txt = m, type = 1 };
                 list_msg.Add(tm);
                 Console.WriteLine("test P1+++++++++++++++");
                 //mainWin1.countExport();
@@ -143,7 +176,7 @@ namespace PTwitchCapture
                 Console.WriteLine("test P2---------------");
                 //mainWin1.countExport();
                 processMsg(tm, false);
-            }
+            }*/
         }
 
 

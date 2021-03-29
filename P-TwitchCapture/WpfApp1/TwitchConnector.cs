@@ -24,8 +24,8 @@ namespace PTwitchCapture
         //public static string channel = "icelabuki";
 
         public static string twitch_username = "ligoligo12";
-        public static string access_token = "8jdu5hk9pklsxyioggnx3k08nyafls";
-        public static string refresh_token = "q0rootdyymy6cvujeqjblkc0sy5buxjxkbi1l8blm7zmmo6rg2";
+        public static string access_token = "3ft0m2ciq6t950fwix9i9v3q12a70r";
+        public static string refresh_token = "9bu7oqgwkhbdz895dx6qu4bdzak6xc63nf9iofxds0jr0f9o0m";
         public static string client_id = "gp762nuuoqcoxypju8c569th9wz7q5";
         public static string channel = "ligoligo12";
 
@@ -155,10 +155,10 @@ namespace PTwitchCapture
             //    client.TimeoutUser(e.ChatMessage.Channel, e.ChatMessage.Username, TimeSpan.FromMinutes(30), "Bad word! 30 minute timeout!");
 
             //Console.WriteLine($"NewMsg " + e.ChatMessage.Message);
-           if(e.ChatMessage.Username != "ligoligo12")
-           {
+           //if(e.ChatMessage.Username != "ligoligo12")
+           //{
                 main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
-           }
+           //}
         }
 
         private void Client_OnWhisperReceived(object sender, OnWhisperReceivedArgs e)
