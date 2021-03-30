@@ -113,7 +113,7 @@ namespace PTwitchCapture
         public void addMsg(string m0, Boolean skipP2)
         {
             string m = m0.Replace("p","P");
-            if (m.Contains("+"))
+            if (m.Contains("1"))
             {
                 TMessage tm = new TMessage() { txt = m, type = 1};
                 list_msg.Add(tm);
@@ -122,21 +122,21 @@ namespace PTwitchCapture
                 processMsg(tm, false);
 
             }
-            if (!skipP2 && m.Contains("AutoP2"))
+            if (!skipP2 && m.Contains("AutoCheer"))
             {
                 TMessage tm = new TMessage() { txt = m, type = 2 };
                 list_msg.Add(tm);
                 //Console.WriteLine("test P2+++++++++++++++");
                 processMsg(tm, false);
             }
-            if (!skipP2 && m.Contains("AutoP1"))
+            if (!skipP2 && m.Contains("AutoJeer"))
             {
                 TMessage tm = new TMessage() { txt = m, type = 3 };
                 list_msg.Add(tm);
                 //Console.WriteLine("test P1---------------");
                 processMsg(tm, false);
             }
-            if (m.Contains("-"))
+            if (m.Contains("2"))
             {
                 TMessage tm = new TMessage() { txt = m, type = 4 };
                 list_msg.Add(tm);

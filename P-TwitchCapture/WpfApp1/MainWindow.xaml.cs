@@ -659,8 +659,8 @@ namespace PTwitchCapture
 
         private void oneSide_Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (oneSide_nextDirection) { getMsg_autoP2("AutoP2");  }
-            else { getMsg_autoP2("AutoP1");  }            
+            if (oneSide_nextDirection) { getMsg_autoP2("AutoCheer");  }
+            else { getMsg_autoP2("AutoJeer");  }            
             oneSide_nextDirection = !oneSide_nextDirection;
 
             /*if (oneSide_nextDirection) { getMsg_autoP2("P2+"); }
