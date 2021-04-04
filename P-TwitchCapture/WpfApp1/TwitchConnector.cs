@@ -155,10 +155,10 @@ namespace PTwitchCapture
             //    client.TimeoutUser(e.ChatMessage.Channel, e.ChatMessage.Username, TimeSpan.FromMinutes(30), "Bad word! 30 minute timeout!");
 
             //Console.WriteLine($"NewMsg " + e.ChatMessage.Message);
-           //if(e.ChatMessage.Username != "ligoligo12")
-           //{
+           if(e.ChatMessage.Username != "ligoligo12")
+           {
                 main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
-           //}
+           }
         }
 
         private void Client_OnWhisperReceived(object sender, OnWhisperReceivedArgs e)

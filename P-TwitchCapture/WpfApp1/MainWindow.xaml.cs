@@ -688,6 +688,10 @@ namespace PTwitchCapture
             {
                 sum = 3;
             }
+            if(sum <= 0)
+            {
+                sum = 1;
+            }
             
             Console.WriteLine("sum = " + sum);
             double d = 60000 / (sum * oneSide_numParticipant);
