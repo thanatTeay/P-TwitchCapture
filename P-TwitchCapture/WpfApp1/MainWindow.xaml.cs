@@ -31,7 +31,7 @@ namespace PTwitchCapture
         Timer myTimer;//time thread for calculation
         static volatile bool isRunning;
         //-----------------------------
-        bool isOneSideMode = false;
+        public bool isOneSideMode = false;
         Timer oneSide_Timer;//time thread for calculation
         int oneSide_numParticipant = 10;
         double oneSide_avgMsg_perMinParticipant = 3;
@@ -76,9 +76,11 @@ namespace PTwitchCapture
             {
                 if (isPause) { return; }
                 Console.WriteLine("NewMsg: " + msg);
+
                 addTxtMsg(user, msg);
-                if (checkV2.IsChecked.Value) { processV2_part1(msg); }
-                else { processV1(msg); }
+                processV2_part1(msg);
+                //if (checkV2.IsChecked.Value) { processV2_part1(msg); }
+                //else { processV1(msg); }
                 //We don't use V1 recently
             }));
         }
@@ -139,7 +141,7 @@ namespace PTwitchCapture
             }
             else
             {
-                a2.addMsg(msg, isOneSideMode);
+                a2.addMsgVS(msg);
                 countExport(); //for P1 vs P2
             }
         }

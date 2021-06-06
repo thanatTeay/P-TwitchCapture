@@ -119,6 +119,7 @@ namespace PTwitchCapture
         public static TwitchClient client_g;
         public static int ii_g = 0;
         public static DateTime nextMsg_g = DateTime.Now;
+
         public static void botSpeakGlobal(string sender, string txt)
         {
             DateTime timeA = DateTime.Now;
@@ -155,10 +156,22 @@ namespace PTwitchCapture
             //    client.TimeoutUser(e.ChatMessage.Channel, e.ChatMessage.Username, TimeSpan.FromMinutes(30), "Bad word! 30 minute timeout!");
 
             //Console.WriteLine($"NewMsg " + e.ChatMessage.Message);
-           if(e.ChatMessage.Username != "ligoligo12")
-           {
+            //if(e.ChatMessage.Username != "ligoligo12")
+            //{
+            if (main.isOneSideMode)
+            {
                 main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
-           }
+            }
+            else
+            {
+               string[] words = e.ChatMessage.Message.Split(',');
+               main.getMsg(words[0], words[1]);
+               Console.WriteLine("testtttttttt 1: "+ words[0] + "testtttttttt 2: " + words[1]);
+
+
+            }
+                
+           //}
         }
 
         private void Client_OnWhisperReceived(object sender, OnWhisperReceivedArgs e)
