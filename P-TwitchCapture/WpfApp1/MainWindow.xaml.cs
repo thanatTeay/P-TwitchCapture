@@ -569,7 +569,10 @@ namespace PTwitchCapture
                             a1.reset();
                             a2.reset();
                             updateGUI();
-                            CountToAdjustStrength();
+                            if (isOneSideMode)
+                            {
+                                CountToAdjustStrength();
+                            }
                             groupAndcountUser();
                             Console.WriteLine("text one side = "+ txt_oneSide_avg);
                             countP1 = 0;
