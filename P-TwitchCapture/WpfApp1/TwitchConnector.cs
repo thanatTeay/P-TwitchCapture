@@ -84,7 +84,11 @@ namespace PTwitchCapture
             //Console.WriteLine("Hey guys! I am a moderator AI" + ii);ii++;
             //Console.WriteLine("Hey guys! I am a moderator AI");
             //client.SendMessage(e.Channel, "Hey guys! I am a moderator AI");
-            botSpeak(e.Channel, "Hey guys! I am a moderator AI");
+            if(main.isAPGInterface == false)
+            {
+                botSpeak(e.Channel, "Hey guys! I am a moderator AI");
+            }
+            
         }
 
 
@@ -160,7 +164,17 @@ namespace PTwitchCapture
             //{
             if (main.isOneSideMode)
             {
-                main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
+                if (main.isAPGInterface)
+                {
+                    string[] words = e.ChatMessage.Message.Split(',');
+                    main.getMsg(words[0], words[1]);
+                    Console.WriteLine("testtttttttt 1: " + words[0] + "testtttttttt 2: " + words[1]);
+                }
+                else
+                {
+                    main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
+                }
+               
             }
             else
             {

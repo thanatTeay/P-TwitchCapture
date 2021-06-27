@@ -32,6 +32,7 @@ namespace PTwitchCapture
         static volatile bool isRunning;
         //-----------------------------
         public bool isOneSideMode = false;
+        public bool isAPGInterface = false;
         Timer oneSide_Timer;//time thread for calculation
         int oneSide_numParticipant = 10;
         double oneSide_avgMsg_perMinParticipant = 3;
@@ -573,7 +574,11 @@ namespace PTwitchCapture
                             {
                                 CountToAdjustStrength();
                             }
-                            groupAndcountUser();
+                            if(isAPGInterface == false)
+                            {
+                                groupAndcountUser();
+                            }
+              
                             Console.WriteLine("text one side = "+ txt_oneSide_avg);
                             countP1 = 0;
                             
@@ -647,6 +652,7 @@ namespace PTwitchCapture
             }
             catch { }
             isOneSideMode = checkOneside.IsChecked.Value;
+            isAPGInterface = apgInterface.IsChecked.Value;
             //oneSide_generateEvery = int.Parse(txt_oneSide_rate.Text);
             oneSide_generateEvery = TheTool.getInt(txt_oneSide_rate);
             //
