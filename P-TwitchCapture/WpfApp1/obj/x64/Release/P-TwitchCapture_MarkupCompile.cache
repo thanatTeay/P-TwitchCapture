@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-C:\Users\maili\Desktop\P-TwitchCapture\P-TwitchCapture\WpfApp1\obj\x64\Debug\
+C:\Users\maili\Desktop\P-TwitchCapture\P-TwitchCapture\WpfApp1\obj\x64\Release\
 PTwitchCapture
 none
 false
-DEBUG;TRACE
+TRACE
 C:\Users\maili\Desktop\P-TwitchCapture\P-TwitchCapture\WpfApp1\App.xaml
 11151548125
 21779064500
