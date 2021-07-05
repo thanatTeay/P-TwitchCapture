@@ -1,1 +1,2 @@
 # P-TwitchCapture
+The component connects itself to the Twitch channel to constantly pull messages by audiences from the Twitch server. Messages are then analyzed, after which commands embedded in messages (if any) are extracted and processed. According to those commands, the social facilitation parameter <B><I>F</I></B> of each AI will be calculated and sent to its AI. In addition, Twitch Message Capturer also forwards those command messages to the Rap Synthesizer to let the latter know of their existence.
