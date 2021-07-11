@@ -96,6 +96,17 @@ namespace PTwitchCapture
             double d2 = score_pos[0] + score_neg[0];
             if (d2 > 0) { dominance = d1 / d2; }
             else { dominance = 0; }
+            //----------------------
+
+
+            int targetWinner = MainWindow.favorCharacter;
+            if (targetWinner == 1) { dominance = getRescale(dominance, -1,1, 0, 1); }
+            else if (targetWinner == 2) { dominance = getRescale(dominance, -1, 1, -1, 0); }
+
+            //if (targetWinner == 1) { dominance = 5; }
+            //else if (targetWinner == 2) { dominance = -5; }
+
+            //-------------------------
             bal_gui = (int)Math.Round(dominance * 100);
             bal_hp = (int)Math.Round(dominance * 120);
             f_p1 = -dominance;
@@ -105,7 +116,37 @@ namespace PTwitchCapture
         }
 
 
-      
+
+
+        public static double getRescale(double v, double min, double max, double newmin, double newmax)
+        {
+            double r = max - min;
+            double r2 = newmax - newmin;
+
+            double v2 = ((v - min) / r * r2) + newmin; // 0--1 = 1/2*1 = 0.5 + 0 = -0.5          // 0--1 = 1/2*1 = 0.5+ -1
+            return v2;
+        }
+
+        //public static double getRescale(double v,
+        //double min, double max, double newmin, double newmax)
+        //{
+        //    double rnew = newmax - newmin;
+        //    double n = getNormalized(v, min, max);
+        //    return 1 * rnew - newmin ;
+        //}
+
+
+        //public static double getNormalized(double v, double min, double max)
+        //{
+        //    double r = max - min;
+        //    if (r > 0)
+        //    {
+        //        v = v - min;
+        //        v = v / r; return v;
+        //    }
+        //    else { return 0; }
+        //}
+
 
 
         //------------

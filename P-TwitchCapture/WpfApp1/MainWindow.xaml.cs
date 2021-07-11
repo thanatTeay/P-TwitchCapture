@@ -67,9 +67,24 @@ namespace PTwitchCapture
             
         }
 
-        
+        public void getMsgInterface(string msg)
+        {
+            //To handle GUI by Thread
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                string[] words = msg.Split(',');
+                if (isPause) { return; }
+                Console.WriteLine("NewMsg: " + msg);
 
-     
+                addTxtMsg(words[0], words[1]);
+                processV2_part1(msg);
+                //if (checkV2.IsChecked.Value) { processV2_part1(msg); }
+                //else { processV1(msg); }
+                //We don't use V1 recently
+            }));
+        }
+
+
         public void getMsg(string user, string msg)
         {
             //To handle GUI by Thread
@@ -78,8 +93,32 @@ namespace PTwitchCapture
                 if (isPause) { return; }
                 Console.WriteLine("NewMsg: " + msg);
 
-                addTxtMsg(user, msg);
-                processV2_part1(msg);
+                if (isAPGInterface)
+                {
+                    try
+                    {
+                        string[] words = msg.Split(',');
+                        addTxtMsg(words[0], words[1]);
+                        Console.WriteLine("Test with interface: " + words[0] + " Message:  " + words[1]);
+                        processV2_part1(words[1]);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("error");
+                    }
+
+
+                }
+                else
+                {
+                    addTxtMsg(user, msg);
+                    processV2_part1(msg);
+                }
+                Console.WriteLine(isAPGInterface);
+                Console.WriteLine(isOneSideMode);
+
+                
+                
                 //if (checkV2.IsChecked.Value) { processV2_part1(msg); }
                 //else { processV1(msg); }
                 //We don't use V1 recently
@@ -230,7 +269,7 @@ namespace PTwitchCapture
 
         }
 
-        void exportFTG()
+        /*void exportFTG()
         {
             if (checkFTG.IsChecked.Value)
             {
@@ -246,6 +285,32 @@ namespace PTwitchCapture
             }
             //Console.WriteLine("P1=" + a2.f_p1 + " P2=" + a2.f_p2);
         }
+        */
+        void exportFTG()
+        {
+            //int targetWinner = comboFavor.SelectedIndex;
+            double f1 = a2.f_p1;
+            double f2 = a2.f_p2;
+
+            //if (targetWinner == 1) { f1 = getNormalized(f1, -1, 0); f2 = getNormalized(f1, 0, 1); }
+            //else if (targetWinner == 2) { f1 = getNormalized(f1, 0, 1); f2 = getNormalized(f1, -1, 0); }
+
+            if (checkFTG.IsChecked.Value)
+            {
+                string path1 = path_root + "/N.txt";
+                string a = f1 + Environment.NewLine + "0";
+                TheTool.writeFile(path1, a, true);
+            }
+            if (checkFTG2.IsChecked.Value)
+            {
+                string path2 = path_root + "/P.txt";
+                string b = f2 + Environment.NewLine + "0";
+                TheTool.writeFile(path2, b, true);
+            }
+            //Console.WriteLine("P1=" + a2.f_p1 + " P2=" + a2.f_p2);
+        }
+
+        
 
         void autoScroll()
         {
@@ -714,6 +779,12 @@ namespace PTwitchCapture
             oneSideMode_startTimer();
 
 
+        }
+
+        public static int favorCharacter = 0;
+        private void comboFavor_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            favorCharacter = comboFavor.SelectedIndex;
         }
 
         class TwitchCountData

@@ -90,6 +90,11 @@
 
                         </Grid>
                     </GroupBox>
+                    <ComboBox x:Name="comboFavor" HorizontalAlignment="Left" Margin="48,166,0,0" VerticalAlignment="Top" Width="120" SelectedIndex="0" SelectionChanged="comboFavor_SelectionChanged">
+                        <ComboBoxItem Content="Normal"/>
+                        <ComboBoxItem Content="Favor P1"/>
+                        <ComboBoxItem Content="Favor P2"/>
+                    </ComboBox>
 
                 </Grid>
             </TabItem>

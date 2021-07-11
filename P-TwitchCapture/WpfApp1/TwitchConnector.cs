@@ -161,31 +161,45 @@ namespace PTwitchCapture
 
             //Console.WriteLine($"NewMsg " + e.ChatMessage.Message);
             //if(e.ChatMessage.Username != "ligoligo12")
+
+
+            //string[] words = e.ChatMessage.Message.Split(',');
+
+           
+            //if (main.isOneSideMode)
             //{
-            if (main.isOneSideMode)
-            {
-                if (main.isAPGInterface)
-                {
-                    string[] words = e.ChatMessage.Message.Split(',');
-                    main.getMsg(words[0], words[1]);
-                    Console.WriteLine("testtttttttt 1: " + words[0] + "testtttttttt 2: " + words[1]);
-                }
-                else
-                {
-                    main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
-                }
-               
-            }
-            else
-            {
-               string[] words = e.ChatMessage.Message.Split(',');
-               main.getMsg(words[0], words[1]);
-               Console.WriteLine("testtttttttt 1: "+ words[0] + "testtttttttt 2: " + words[1]);
+            //    if (main.isAPGInterface == true)
+            //    {
+            //        //string[] words = e.ChatMessage.Message.Split(',');
+            //        //main.getMsg(words[0], words[1]);
+            //        //Console.WriteLine("testtttttttt 1: " + words[0] + "testtttttttt 2: " + words[1]);
+            //        Console.WriteLine("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            //    }
+            //    else
+            //    {
+            //        main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
+            //        Console.WriteLine("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+            //    }
+            //
+            //}
+            //else if (words.Length >= 1)
+            //{
+            //    if (main.isAPGInterface)
+            //    {
+            //        //string[] words = e.ChatMessage.Message.Split(',');
+            //        main.getMsg(words[0], words[1]);
+            //        Console.WriteLine("testtttttttt 1: " + words[0] + "testtttttttt 2: " + words[1]);
+            //    }
+            //    else
+            //    {
+            //        main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
+            //    }
 
 
-            }
-                
-           //}
+            //}
+
+            //}
+            main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
         }
 
         private void Client_OnWhisperReceived(object sender, OnWhisperReceivedArgs e)
