@@ -100,11 +100,11 @@ namespace PTwitchCapture
 
 
             int targetWinner = MainWindow.favorCharacter;
-            if (targetWinner == 1) { dominance = getRescale(dominance, -1,1, 0, 1); }
-            else if (targetWinner == 2) { dominance = getRescale(dominance, -1, 1, -1, 0); }
+            //if (targetWinner == 1) { dominance = getRescale(dominance, -1,1, 0, 1); }
+            //else if (targetWinner == 2) { dominance = getRescale(dominance, -1, 1, -1, 0); }
 
-            //if (targetWinner == 1) { dominance = 5; }
-            //else if (targetWinner == 2) { dominance = -5; }
+            if (targetWinner == 1) { dominance = (dominance+1)/2; }
+            else if (targetWinner == 2) { dominance = ((dominance + 1)/ 2)-1; }
 
             //-------------------------
             bal_gui = (int)Math.Round(dominance * 100);
