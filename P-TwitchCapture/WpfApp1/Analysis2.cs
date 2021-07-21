@@ -151,40 +151,82 @@ namespace PTwitchCapture
 
         //------------
 
-        public void addMsg(string m0, Boolean skipP2)
+        public void addMsg(string user0, string m0, Boolean skipP2)
         {
             string m = m0.Replace("p","P");
-            if (m.Contains("1"))
+            m = m.Replace(" ", "");
+            string user = user0.Replace("@", "");
+            Console.WriteLine(" >>" + m + "<<");
+            if (m == "P1+")
             {
-                TMessage tm = new TMessage() { txt = m, type = 1};
+                TMessage tm = new TMessage() { txt = m, type = 1 };
                 list_msg.Add(tm);
                 Console.WriteLine("test P1+++++++++++++++");
                 //mainWin1.countExport();
                 processMsg(tm, false);
+                TheScoreBoard.UpdateUser(user, 1);
 
             }
-            if (!skipP2 && m.Contains("AutoCheer"))
+            else if (!skipP2 && m == "AutoCheer")
             {
                 TMessage tm = new TMessage() { txt = m, type = 2 };
                 list_msg.Add(tm);
                 //Console.WriteLine("test P2+++++++++++++++");
                 processMsg(tm, false);
             }
-            if (!skipP2 && m.Contains("AutoJeer"))
+            else if (!skipP2 && m == "AutoJeer")
             {
                 TMessage tm = new TMessage() { txt = m, type = 3 };
                 list_msg.Add(tm);
                 //Console.WriteLine("test P1---------------");
                 processMsg(tm, false);
             }
-            if (m.Contains("2"))
+            else if (m == "P2-")
             {
                 TMessage tm = new TMessage() { txt = m, type = 4 };
                 list_msg.Add(tm);
                 Console.WriteLine("test P2---------------");
                 //mainWin1.countExport();
                 processMsg(tm, false);
+                TheScoreBoard.UpdateUser(user, -2);
             }
+
+
+
+
+            //if (m.Contains("1"))
+            //{
+            //    TMessage tm = new TMessage() { txt = m, type = 1};
+            //    list_msg.Add(tm);
+            //    Console.WriteLine("test P1+++++++++++++++");
+            //    //mainWin1.countExport();
+            //    processMsg(tm, false);
+            //    TheScoreBoard.UpdateUser(user,1);
+
+            //}
+            //if (!skipP2 && m.Contains("AutoCheer"))
+            //{
+            //    TMessage tm = new TMessage() { txt = m, type = 2 };
+            //    list_msg.Add(tm);
+            //    //Console.WriteLine("test P2+++++++++++++++");
+            //    processMsg(tm, false);
+            //}
+            //if (!skipP2 && m.Contains("AutoJeer"))
+            //{
+            //    TMessage tm = new TMessage() { txt = m, type = 3 };
+            //    list_msg.Add(tm);
+            //    //Console.WriteLine("test P1---------------");
+            //    processMsg(tm, false);
+            //}
+            //if (m.Contains("2"))
+            //{
+            //    TMessage tm = new TMessage() { txt = m, type = 4 };
+            //    list_msg.Add(tm);
+            //    Console.WriteLine("test P2---------------");
+            //    //mainWin1.countExport();
+            //    processMsg(tm, false);
+            //    TheScoreBoard.UpdateUser(user, -2);
+            //}
 
             /*string m = m0.Replace("p", "P");
             if (m.Contains("P1+"))
@@ -222,73 +264,88 @@ namespace PTwitchCapture
 
 
 
-        public void addMsgVS(string m0)
+        public void addMsgVS(string user0, string m0)
         {
             string m = m0.Replace("p", "P");
-            if (m.Contains("P1+"))
+            m = m.Replace(" ", "");
+            string user = user0.Replace("@", "");
+            Console.WriteLine(user +"  testtttttt  " + m0);
+            if (m == "P1+")
             {
                 TMessage tm = new TMessage() { txt = m, type = 1 };
                 list_msg.Add(tm);
                 Console.WriteLine("test P1+++++++++++++++");
                 //mainWin1.countExport();
                 processMsg(tm, false);
+                TheScoreBoard.UpdateUser(user, 1);
 
             }
-            if ( m.Contains("P2+"))
+            else if (m == "P2+")
             {
                 TMessage tm = new TMessage() { txt = m, type = 2 };
                 list_msg.Add(tm);
                 Console.WriteLine("test P2+++++++++++++++");
                 processMsg(tm, false);
+                TheScoreBoard.UpdateUser(user, 2);
             }
-            if (m.Contains("P1-"))
+            else if (m == "P1-")
             {
                 TMessage tm = new TMessage() { txt = m, type = 3 };
                 list_msg.Add(tm);
                 Console.WriteLine("test P1---------------");
                 processMsg(tm, false);
+                TheScoreBoard.UpdateUser(user, -1);
             }
-            if (m.Contains("P2-"))
+            else if (m == "P2-")
             {
                 TMessage tm = new TMessage() { txt = m, type = 4 };
                 list_msg.Add(tm);
                 Console.WriteLine("test P2---------------");
                 //mainWin1.countExport();
                 processMsg(tm, false);
+                TheScoreBoard.UpdateUser(user, -2);
             }
 
-            /*string m = m0.Replace("p", "P");
-            if (m.Contains("P1+"))
-            {
-                TMessage tm = new TMessage() { txt = m, type = 1 };
-                list_msg.Add(tm);
-                Console.WriteLine("test P1+++++++++++++++");
-                //mainWin1.countExport();
-                processMsg(tm, false);
 
-            }
-            if (!skipP2 && m.Contains("P2+"))
-            {
-                TMessage tm = new TMessage() { txt = m, type = 2 };
-                list_msg.Add(tm);
-                //Console.WriteLine("test P2+++++++++++++++");
-                processMsg(tm, false);
-            }
-            if (!skipP2 && m.Contains("P1-"))
-            {
-                TMessage tm = new TMessage() { txt = m, type = 3 };
-                list_msg.Add(tm);
-                //Console.WriteLine("test P1---------------");
-                processMsg(tm, false);
-            }
-            if (m.Contains("P2-"))
-            {
-                TMessage tm = new TMessage() { txt = m, type = 4 };
-                list_msg.Add(tm);
-                Console.WriteLine("test P2---------------");
-                //mainWin1.countExport();
-                processMsg(tm, false);
-            }*/
+
+
+
+            //if (m.Contains("P1+"))
+            //{
+            //    TMessage tm = new TMessage() { txt = m, type = 1 };
+            //    list_msg.Add(tm);
+            //    Console.WriteLine("test P1+++++++++++++++");
+            //    //mainWin1.countExport();
+            //    processMsg(tm, false);
+            //    TheScoreBoard.UpdateUser(user, 1);
+
+            //}
+            //if ( m.Contains("P2+"))
+            //{
+            //    TMessage tm = new TMessage() { txt = m, type = 2 };
+            //    list_msg.Add(tm);
+            //    Console.WriteLine("test P2+++++++++++++++");
+            //    processMsg(tm, false);
+            //    TheScoreBoard.UpdateUser(user, 2);
+            //}
+            //if (m.Contains("P1-"))
+            //{
+            //    TMessage tm = new TMessage() { txt = m, type = 3 };
+            //    list_msg.Add(tm);
+            //    Console.WriteLine("test P1---------------");
+            //    processMsg(tm, false);
+            //    TheScoreBoard.UpdateUser(user, -1);
+            //}
+            //if (m.Contains("P2-"))
+            //{
+            //    TMessage tm = new TMessage() { txt = m, type = 4 };
+            //    list_msg.Add(tm);
+            //    Console.WriteLine("test P2---------------");
+            //    //mainWin1.countExport();
+            //    processMsg(tm, false);
+            //    TheScoreBoard.UpdateUser(user, -2);
+            //}
+
         }
 
 

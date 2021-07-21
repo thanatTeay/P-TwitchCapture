@@ -234,6 +234,7 @@
     <Compile Include="Analysis2.cs" />
     <Compile Include="Data_Message.cs" />
     <Compile Include="SentimentAnalyzer.cs" />
+    <Compile Include="TheScoreBoard.cs" />
     <Compile Include="TheTool.cs" />
     <Compile Include="TwitchConnector.cs" />
     <Compile Include="Unused.cs" />

@@ -43,6 +43,7 @@ namespace PTwitchCapture
 
         public MainWindow()
         {
+            TheScoreBoard.LoadAll();
             InitializeComponent();
             initialized = true;
             countP1 = 0;
@@ -67,7 +68,7 @@ namespace PTwitchCapture
             
         }
 
-        public void getMsgInterface(string msg)
+        /*public void getMsgInterface(string msg)
         {
             //To handle GUI by Thread
             this.Dispatcher.Invoke((Action)(() =>
@@ -82,7 +83,7 @@ namespace PTwitchCapture
                 //else { processV1(msg); }
                 //We don't use V1 recently
             }));
-        }
+        }*/
 
 
         public void getMsg(string user, string msg)
@@ -100,19 +101,20 @@ namespace PTwitchCapture
                         string[] words = msg.Split(',');
                         addTxtMsg(words[0], words[1]);
                         Console.WriteLine("Test with interface: " + words[0] + " Message:  " + words[1]);
-                        processV2_part1(words[1]);
+                        processV2_part1(words[0], words[1]);
                     }
                     catch
                     {
                         Console.WriteLine("error");
                     }
 
+                    //@name,msg
 
                 }
                 else
                 {
                     addTxtMsg(user, msg);
-                    processV2_part1(msg);
+                    processV2_part1(user, msg);
                 }
                 Console.WriteLine(isAPGInterface);
                 Console.WriteLine(isOneSideMode);
@@ -171,23 +173,23 @@ namespace PTwitchCapture
         }
 
         //Part 1 invoked by Msg
-        void processV2_part1(string msg)
+        void processV2_part1(string user,string msg)
         {
             
             if (isOneSideMode) {
-                a2.addMsg(msg, isOneSideMode);
+                a2.addMsg(user, msg, isOneSideMode);
     
                 countExport(); //for P1 vs P2
             }
             else
             {
-                a2.addMsgVS(msg);
+                a2.addMsgVS(user, msg);
                 countExport(); //for P1 vs P2
             }
         }
         void processV2_part1_autoP2(string msg)
         {
-            a2.addMsg(msg, false);
+            a2.addMsg("", msg, false);
 
             //countExport(); //for P1 vs P2
         }
@@ -198,7 +200,33 @@ namespace PTwitchCapture
             a2.doUpdate();
             updateGUI();
             exportFTG();
+            exportScoreBoard();
         }
+
+
+        void exportScoreBoard()
+        {
+            if(DateTime.Now > nextScoreSave_All)
+            {
+                TheScoreBoard.SaveAll();
+                nextScoreSave_All = DateTime.Now.AddSeconds(scoreSaveInterval_All);
+                TheTool.log("Saved ALL");
+            }
+            if (DateTime.Now > nextScoreUpdate_Top10)
+            {
+                TheScoreBoard.UpdateTop10();
+                nextScoreUpdate_Top10 = DateTime.Now.AddSeconds(scoreUpdateInterval_Top10);
+                TheTool.log("Updated TOP10");
+            }
+
+        }
+
+
+        int scoreSaveInterval_All = 30;//save all data
+        int scoreUpdateInterval_Top10 = 10;//update top 10
+
+        DateTime nextScoreSave_All = DateTime.Now.AddSeconds(5);
+        DateTime nextScoreUpdate_Top10 = DateTime.Now.AddSeconds(5);
 
         //--------------------------
 
@@ -552,6 +580,8 @@ namespace PTwitchCapture
                     TheTool.exportCSV_orTXT(filename1, convertDataMessage(), false);
                 }
                 if (showTxt) { System.Windows.MessageBox.Show(@"Save to '" + path_saveFolder + "'", "Export CSV"); }
+
+                TheScoreBoard.SaveAll();
             }
             catch (Exception ex) { showError(ex); }
         }

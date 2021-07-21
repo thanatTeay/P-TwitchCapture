@@ -20,4 +20,6 @@ namespace PTwitchCapture
         public String user = "";
         public String count = "";
     }
+
+
 }

@@ -675,7 +675,7 @@ namespace PTwitchCapture
                 var logFile = File.ReadAllLines(path);
                 return new List<string>(logFile);
             }
-            catch (Exception ex) { Sys.showError(ex); return new List<string> { }; }
+            catch (Exception ex) { TheTool.log(path + "xxxxxxxxxxxxxxxxxxxx" + ex.ToString()); return new List<string> { }; }
         }
 
         //static public double[][] read_File_getArrayArray(string path, Boolean skipFirstRow)
@@ -1924,6 +1924,16 @@ namespace PTwitchCapture
                 TextWriter tw = new StreamWriter(path);//dispose to unlock
                 tw.Close();
             }
+        }
+
+        public static void log(string s)
+        {
+            Console.WriteLine(s);
+        }
+
+        public static void log(Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
         }
     }
 

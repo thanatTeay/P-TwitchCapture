@@ -165,7 +165,7 @@ namespace PTwitchCapture
 
             //string[] words = e.ChatMessage.Message.Split(',');
 
-           
+
             //if (main.isOneSideMode)
             //{
             //    if (main.isAPGInterface == true)
@@ -199,6 +199,8 @@ namespace PTwitchCapture
             //}
 
             //}
+
+            TheTool.log("HEREEEEEEE");
             main.getMsg(e.ChatMessage.Username, e.ChatMessage.Message);
         }
 
