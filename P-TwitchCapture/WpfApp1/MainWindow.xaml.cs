@@ -640,6 +640,7 @@ namespace PTwitchCapture
                 oneSide_Timer.Dispose();
                 myTimer.Stop();
                 myTimer.Dispose();
+                //TheScoreBoard.SaveAll();
 
             }
         }
